@@ -18,9 +18,9 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            overflow-x: hidden;
         }
 
-        /* 320x50 ایڈز بینر کی جگہ */
         .ads-slot {
             width: 320px;
             height: 50px;
@@ -41,6 +41,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 10;
         }
 
         .logo-section h1 {
@@ -74,9 +76,115 @@
             font-size: 14px;
             border-radius: 5px;
             cursor: pointer;
+            transition: 0.3s;
         }
 
-        /* سرچ بار ڈیزائن */
+        .dashboard-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* جدید سائیڈ بار ڈیش بورڈ */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 290px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            transition: all 0.3s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        body[dir="ltr"] .sidebar { right: -340px; }
+        body[dir="rtl"] .sidebar { left: -340px; }
+        body[dir="ltr"] .sidebar.open { right: 0; }
+        body[dir="rtl"] .sidebar.open { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        /* مینو گروپس اور ڈراپ ڈاؤن لنکس */
+        .menu-group-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #6c757d;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 10px 12px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--dark-bg);
+            font-weight: 500;
+            font-size: 14px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 6px;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #e2e6ea;
+            border-color: #ced4da;
+        }
+
+        .sub-menu {
+            padding-left: 15px;
+            padding-right: 15px;
+            margin-bottom: 10px;
+            border-left: 2px solid var(--secondary-color);
+        }
+        
+        body[dir="rtl"] .sub-menu {
+            border-left: none;
+            border-right: 2px solid var(--secondary-color);
+        }
+
+        .sub-item {
+            display: block;
+            padding: 8px 10px;
+            font-size: 13px;
+            color: #495057;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .sub-item:hover {
+            background-color: #e9ecef;
+            color: var(--primary-color);
+        }
+
+        /* مرکزی سرچ بار */
         .search-container {
             max-width: 600px;
             margin: 30px auto;
@@ -109,7 +217,7 @@
             font-size: 15px;
         }
 
-        /* مین باڈی لے آؤٹ */
+        /* مین مواد */
         .main-content {
             max-width: 1000px;
             margin: 0 auto;
@@ -120,12 +228,9 @@
         }
 
         @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
+            .main-content { grid-template-columns: 1fr; }
         }
 
-        /* ویڈیوز کا حصہ */
         .video-section h2 {
             color: var(--dark-bg);
             border-bottom: 2px solid var(--primary-color);
@@ -163,7 +268,6 @@
             color: #333;
         }
 
-        /* اے آئی اسسٹنٹ باکس */
         .ai-assistant {
             background-color: white;
             border-radius: 8px;
@@ -189,9 +293,21 @@
             color: #495057;
             margin-bottom: 10px;
         }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.4);
+            z-index: 90;
+            display: none;
+        }
+
+        .overlay.show { display: block; }
     </style>
 </head>
 <body>
+
+    <div class="overlay" id="overlayBg"></div>
 
     <div class="ads-slot">320×50 Advertisement Slot</div>
 
@@ -201,105 +317,39 @@
         </div>
         <div class="header-buttons">
             <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">اردو</button>
-            <button class="dashboard-btn" id="dashBtn">Dashboard ☰</button>
+            <button class="dashboard-btn" id="dashBtn" onclick="toggleSidebar()">Dashboard ☰</button>
         </div>
     </header>
 
-    <div class="search-container">
-        <div class="search-box">
-            <input type="text" id="urlInput" placeholder="Enter website URL or search engine name...">
-            <button id="txt-search-btn" onclick="openWebsite()">Open</button>
+    <!-- اپڈیٹ شدہ سائیڈ بار ڈیش بورڈ مینو -->
+    <div class="sidebar" id="sidebarMenu">
+        <div class="sidebar-header">
+            <div class="sidebar-title" id="txt-side-title">Dashboard Options</div>
+            <button class="close-btn" onclick="toggleSidebar()">&times;</button>
         </div>
-    </div>
-
-    <div class="main-content">
-        <div class="video-section">
-            <h2 id="txt-videos-heading">Latest Research & Videos</h2>
-            <div class="video-grid">
-                <div class="video-card">
-                    <div class="video-thumbnail">YouTube Video</div>
-                    <div class="video-title" id="txt-vid1">General health tips and daily wellness habits</div>
-                </div>
-                <div class="video-card">
-                    <div class="video-thumbnail">YouTube Video</div>
-                    <div class="video-title" id="txt-vid2">Understanding balanced nutrition and active lifestyle</div>
-                </div>
-            </div>
+        
+        <!-- گروپ 1: مین پروفائل -->
+        <div class="menu-group-title" id="g-profile">Main Profile</div>
+        <a class="menu-item" href="#" id="m-profile">👤 Profile</a>
+        <div class="sub-menu">
+            <a class="sub-item" href="#" id="m-cog-profile">🧠 Cognitive Profile</a>
+        </div>
+        
+        <a class="menu-item" href="#" id="m-research">🛠️ Services & Research</a>
+        <div class="sub-menu">
+            <a class="sub-item" href="#" id="m-service">💼 Service</a>
+            <a class="sub-item" href="#" id="m-res-item">🔬 Research</a>
         </div>
 
-        <div class="ai-assistant">
-            <div class="ai-title" id="txt-ai-title">Health AI Assistant 🤖</div>
-            <div class="ai-chat-space" id="txt-ai-msg">
-                Welcome! I am your digital assistant. Ask me for guidance regarding website features or general wellness information.
-            </div>
-        </div>
-    </div>
+        <!-- گروپ 2: میڈیا ہب -->
+        <div class="menu-group-title" id="g-media">Media Hub</div>
+        <a class="menu-item" href="#" id="m-youtube">📺 YouTube</a>
+        <a class="menu-item" href="#" id="m-blog">✍️ Blog</a>
+        <a class="menu-item" href="#" id="m-gallery">🖼️ Gallery</a>
 
-    <div class="ads-slot" style="margin-top: 40px;">320×50 Advertisement Slot</div>
+        <!-- گروپ 3: کمیونٹی -->
+        <div class="menu-group-title" id="g-community">Community</div>
+        <a class="menu-item" href="#" id="m-member">💳 Membership</a>
+        <a class="menu-item" href="#" id="m-complaint">⚠️ Complaints</a>
 
-    <script>
-        let currentLang = 'en';
-
-        const translations = {
-            en: {
-                title: "Hakim Asif Arain Official",
-                searchPlaceholder: "Enter website URL or search engine name...",
-                searchBtn: "Open",
-                videosHeading: "Latest Research & Videos",
-                vid1: "General health tips and daily wellness habits",
-                vid2: "Understanding balanced nutrition and active lifestyle",
-                aiTitle: "Health AI Assistant 🤖",
-                aiMsg: "Welcome! I am your digital assistant. Ask me for guidance regarding website features or general wellness information.",
-                dashBtn: "Dashboard ☰",
-                langBtnText: "اردو"
-            },
-            ur: {
-                title: "حکیم آصف آرائیں آفیشل",
-                searchPlaceholder: "سرچ انجن کا نام یا ویب سائٹ کا پتہ (URL) لکھیں...",
-                searchBtn: "کھولیں",
-                videosHeading: "تازہ ترین ویڈیوز اور تحقیقات",
-                vid1: "صحت عامہ کے اصول اور روزمرہ کی اچھی عادات",
-                vid2: "متوازن غذا اور فعال طرز زندگی کی اہمیت",
-                aiTitle: "ہیلتھ اے آئی اسسٹنٹ 🤖",
-                aiMsg: "السلام علیکم! میں آپ کا ڈیجیٹل اسسٹنٹ ہوں۔ اس ایپ کو استعمال کرنے یا عام صحت کے معلوماتی اصولوں کے بارے میں مجھ سے رہنمائی لیں۔",
-                dashBtn: "ڈیش بورڈ ☰",
-                langBtnText: "English"
-            }
-        };
-
-        function toggleLanguage() {
-            if (currentLang === 'en') {
-                currentLang = 'ur';
-                document.documentElement.lang = 'ur';
-                document.documentElement.dir = 'rtl';
-            } else {
-                currentLang = 'en';
-                document.documentElement.lang = 'en';
-                document.documentElement.dir = 'ltr';
-            }
-            updateDOM();
-        }
-
-        function updateDOM() {
-            const langData = translations[currentLang];
-            document.getElementById('txt-title').innerText = langData.title;
-            document.getElementById('urlInput').placeholder = langData.searchPlaceholder;
-            document.getElementById('txt-search-btn').innerText = langData.searchBtn;
-            document.getElementById('txt-videos-heading').innerText = langData.videosHeading;
-            document.getElementById('txt-vid1').innerText = langData.vid1;
-            document.getElementById('txt-vid2').innerText = langData.vid2;
-            document.getElementById('txt-ai-title').innerText = langData.aiTitle;
-            document.getElementById('txt-ai-msg').innerText = langData.aiMsg;
-            document.getElementById('dashBtn').innerText = langData.dashBtn;
-            document.getElementById('langBtn').innerText = langData.langBtnText;
-        }
-
-        function openWebsite() {
-            var input = document.getElementById('urlInput').value.trim();
-            if (input) {
-                if (!input.startsWith('http://') && !input.startsWith('https://')) {
-                    window.open('https://google.com' + encodeURIComponent(input), '_blank');
-                } else {
-                    window.open(input, '_blank');
-                }
-            }
+        <!-- گروپ 4: قوانین -->
