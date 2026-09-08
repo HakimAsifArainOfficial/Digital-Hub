@@ -18,9 +18,9 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            overflow-x: hidden;
         }
 
+        /* 320x50 ایڈز بینر کی جگہ */
         .ads-slot {
             width: 320px;
             height: 50px;
@@ -41,8 +41,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: relative;
-            z-index: 10;
         }
 
         .logo-section h1 {
@@ -76,158 +74,9 @@
             font-size: 14px;
             border-radius: 5px;
             cursor: pointer;
-            transition: 0.3s;
         }
 
-        .dashboard-btn:hover {
-            background-color: var(--secondary-color);
-        }
-
-        /* سائیڈ بار ڈیش بورڈ ڈیزائن */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            width: 280px;
-            background-color: white;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            z-index: 100;
-            transition: all 0.3s ease;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        body[dir="ltr"] .sidebar {
-            right: -320px;
-        }
-
-        body[dir="rtl"] .sidebar {
-            left: -320px;
-        }
-
-        body[dir="ltr"] .sidebar.open {
-            right: 0;
-        }
-
-        body[dir="rtl"] .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-        }
-
-        .sidebar-title {
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 18px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #6c757d;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--dark-bg);
-            font-weight: 500;
-            font-size: 14px;
-            border: 1px solid #e9ecef;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .menu-item:hover {
-            background-color: #e2e6ea;
-            border-color: #ced4da;
-        }
-
-        /* ارننگ ٹوگل بٹن سٹائل */
-        .earning-box {
-            background-color: #e8f5e9;
-            border: 1px solid #c8e6c9;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: auto;
-        }
-
-        .earning-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-            color: #2e7d32;
-            font-size: 14px;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 22px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 22px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: #2e7d32;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
-
-        .earning-status {
-            font-size: 11px;
-            color: #558b2f;
-            margin-top: 5px;
-        }
-
+        /* سرچ بار ڈیزائن */
         .search-container {
             max-width: 600px;
             margin: 30px auto;
@@ -260,6 +109,7 @@
             font-size: 15px;
         }
 
+        /* مین باڈی لے آؤٹ */
         .main-content {
             max-width: 1000px;
             margin: 0 auto;
@@ -275,6 +125,7 @@
             }
         }
 
+        /* ویڈیوز کا حصہ */
         .video-section h2 {
             color: var(--dark-bg);
             border-bottom: 2px solid var(--primary-color);
@@ -312,6 +163,7 @@
             color: #333;
         }
 
+        /* اے آئی اسسٹنٹ باکس */
         .ai-assistant {
             background-color: white;
             border-radius: 8px;
@@ -337,26 +189,9 @@
             color: #495057;
             margin-bottom: 10px;
         }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.4);
-            z-index: 90;
-            display: none;
-        }
-
-        .overlay.show {
-            display: block;
-        }
     </style>
 </head>
 <body>
-
-    <div class="overlay" id="overlayBg"></div>
 
     <div class="ads-slot">320×50 Advertisement Slot</div>
 
@@ -366,20 +201,105 @@
         </div>
         <div class="header-buttons">
             <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">اردو</button>
-            <button class="dashboard-btn" id="dashBtn" onclick="toggleSidebar()">Dashboard ☰</button>
+            <button class="dashboard-btn" id="dashBtn">Dashboard ☰</button>
         </div>
     </header>
 
-    <!-- سائیڈ بار ڈیش بورڈ پینل -->
-    <div class="sidebar" id="sidebarMenu">
-        <div class="sidebar-header">
-            <div class="sidebar-title" id="txt-side-title">Dashboard Options</div>
-            <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="urlInput" placeholder="Enter website URL or search engine name...">
+            <button id="txt-search-btn" onclick="openWebsite()">Open</button>
         </div>
-        
-        <a class="menu-item" href="#" id="menu-social">🌐 Social Media Accounts</a>
-        <a class="menu-item" href="#" id="menu-security">🛡️ Security Tools</a>
-        <a class="menu-item" href="#" id="menu-privacy">🔒 Privacy Guard</a>
-        <a class="menu-item" href="https://virustotal.com" target="_blank" id="menu-virus">🔍 Virus Check (VirusTotal)</a>
-        
-        <div class="earning-box">
+    </div>
+
+    <div class="main-content">
+        <div class="video-section">
+            <h2 id="txt-videos-heading">Latest Research & Videos</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumbnail">YouTube Video</div>
+                    <div class="video-title" id="txt-vid1">General health tips and daily wellness habits</div>
+                </div>
+                <div class="video-card">
+                    <div class="video-thumbnail">YouTube Video</div>
+                    <div class="video-title" id="txt-vid2">Understanding balanced nutrition and active lifestyle</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-assistant">
+            <div class="ai-title" id="txt-ai-title">Health AI Assistant 🤖</div>
+            <div class="ai-chat-space" id="txt-ai-msg">
+                Welcome! I am your digital assistant. Ask me for guidance regarding website features or general wellness information.
+            </div>
+        </div>
+    </div>
+
+    <div class="ads-slot" style="margin-top: 40px;">320×50 Advertisement Slot</div>
+
+    <script>
+        let currentLang = 'en';
+
+        const translations = {
+            en: {
+                title: "Hakim Asif Arain Official",
+                searchPlaceholder: "Enter website URL or search engine name...",
+                searchBtn: "Open",
+                videosHeading: "Latest Research & Videos",
+                vid1: "General health tips and daily wellness habits",
+                vid2: "Understanding balanced nutrition and active lifestyle",
+                aiTitle: "Health AI Assistant 🤖",
+                aiMsg: "Welcome! I am your digital assistant. Ask me for guidance regarding website features or general wellness information.",
+                dashBtn: "Dashboard ☰",
+                langBtnText: "اردو"
+            },
+            ur: {
+                title: "حکیم آصف آرائیں آفیشل",
+                searchPlaceholder: "سرچ انجن کا نام یا ویب سائٹ کا پتہ (URL) لکھیں...",
+                searchBtn: "کھولیں",
+                videosHeading: "تازہ ترین ویڈیوز اور تحقیقات",
+                vid1: "صحت عامہ کے اصول اور روزمرہ کی اچھی عادات",
+                vid2: "متوازن غذا اور فعال طرز زندگی کی اہمیت",
+                aiTitle: "ہیلتھ اے آئی اسسٹنٹ 🤖",
+                aiMsg: "السلام علیکم! میں آپ کا ڈیجیٹل اسسٹنٹ ہوں۔ اس ایپ کو استعمال کرنے یا عام صحت کے معلوماتی اصولوں کے بارے میں مجھ سے رہنمائی لیں۔",
+                dashBtn: "ڈیش بورڈ ☰",
+                langBtnText: "English"
+            }
+        };
+
+        function toggleLanguage() {
+            if (currentLang === 'en') {
+                currentLang = 'ur';
+                document.documentElement.lang = 'ur';
+                document.documentElement.dir = 'rtl';
+            } else {
+                currentLang = 'en';
+                document.documentElement.lang = 'en';
+                document.documentElement.dir = 'ltr';
+            }
+            updateDOM();
+        }
+
+        function updateDOM() {
+            const langData = translations[currentLang];
+            document.getElementById('txt-title').innerText = langData.title;
+            document.getElementById('urlInput').placeholder = langData.searchPlaceholder;
+            document.getElementById('txt-search-btn').innerText = langData.searchBtn;
+            document.getElementById('txt-videos-heading').innerText = langData.videosHeading;
+            document.getElementById('txt-vid1').innerText = langData.vid1;
+            document.getElementById('txt-vid2').innerText = langData.vid2;
+            document.getElementById('txt-ai-title').innerText = langData.aiTitle;
+            document.getElementById('txt-ai-msg').innerText = langData.aiMsg;
+            document.getElementById('dashBtn').innerText = langData.dashBtn;
+            document.getElementById('langBtn').innerText = langData.langBtnText;
+        }
+
+        function openWebsite() {
+            var input = document.getElementById('urlInput').value.trim();
+            if (input) {
+                if (!input.startsWith('http://') && !input.startsWith('https://')) {
+                    window.open('https://google.com' + encodeURIComponent(input), '_blank');
+                } else {
+                    window.open(input, '_blank');
+                }
+            }
